@@ -34,11 +34,3 @@ class SimNet(nn.Module):
 
 def simnet(in_channels, num_classes):
     return SimNet(in_channels, num_classes)
-
-
-if __name__ == '__main__':
-    from torchsummary import summary
-
-    model = simnet(3, 5)
-    summary(model, (3, 32, 32))
-    print(model)

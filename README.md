@@ -1,18 +1,18 @@
 # CNN LEGO: Disassembling and Assembling Convolutional Neural Networks
 
-<div align=center><img width="450" src="framework.jpg"/></div>
+<div align="center"><img width="450" src="framework.jpg"/></div>
 
 ## Requirements
 
-+ Python version: 3.9
-+ PyTorch version: 2.0.1
++ Python Version: 3.9
++ PyTorch Version: 2.0.1
 + GPU: NVIDIA RTX A6000 / NVIDIA A40
 
 ## Quick Start
 
 ### Prepare The Source Models
 
-* Training a pre-trained Model:
+* Train a Pre-trained Model:
 
 ```bash
 python engines/train.py \
@@ -28,9 +28,9 @@ python engines/train.py \
 
 ### Model Disassembling
 
-<div align=center><img width="450" src="model_disassembling.jpg"/></div>
+<div align="center"><img width="450" src="model_disassembling.jpg"/></div>
 
-* Selecting the Top 1% of Samples with High Confidence:
+* Select the Top 1% of Samples with High Confidence:
 
 ```bash
 python core/sample_select.py \
@@ -43,7 +43,7 @@ python core/sample_select.py \
   --num_samples 50
 ```
 
-* Relevant Feature Identifying (\alpha and \beta can be configured in core/relevant_feature_identifying.py):
+*  Relevant Features Identifying (\alpha and \beta can be configured in core/relevant_feature_identifying.py):
 
 ```bash
 python core/relevant_feature_identifying.py \
@@ -55,7 +55,7 @@ python core/relevant_feature_identifying.py \
   --save_dir ${save_dir}
 ```
 
-* Parameter Linking and Model Disassembling (output the disassembled task-aware component):
+* Parameter Linking and Model Assembling (output the disassembled task-aware component):
 
 ```bash
 python core/model_disassemble.py \
@@ -70,7 +70,7 @@ python core/model_disassemble.py \
 
 ### Model Assembling
 
-<div align=center><img width="450" src="model_assembling.jpg"/></div>
+<div align="center"><img width="450" src="model_assembling.jpg"/></div>
 
 * Parameter Scaling (optional):
 
@@ -94,7 +94,7 @@ python core/model_assemble.py \
 
 ### Others
 
-* Evaluate the accuracy of the model or task-aware component:
+* Evaluate the Accuracy of the Model or Task-aware Component:
 
 ```bash
 python engines/test.py \
@@ -105,7 +105,7 @@ python engines/test.py \
   --data_dir ${data_dir}
 ```
 
-* Model Decision Route Visualizing:
+* Visualize Model Decision Routes:
 
 ```bash
 python core/model_decision_route_visualizing.py \

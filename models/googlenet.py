@@ -126,4 +126,3 @@ class GoogleNet(nn.Module):
 
 def googlenet(in_channels=3, num_classes=10):
     return GoogleNet(in_channels=in_channels, num_classes=num_classes)
-

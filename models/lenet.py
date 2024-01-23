@@ -6,6 +6,7 @@ import torch.nn.functional as F
 
 class LeNet(nn.Module):
     """LeNet-like network for tests with MNIST (28x28)."""
+
     def __init__(self, in_channels=1, num_classes=10, **kwargs):
         super().__init__()
         # main part of the network

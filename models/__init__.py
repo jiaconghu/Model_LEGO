@@ -36,8 +36,6 @@ def load_modules(model, model_layers=None):
             modules.append(module)
         if isinstance(module, torch.nn.Linear):
             modules.append(module)
-        # if isinstance(module, torch.nn.ReLU):
-        #     modules.append(module)
 
     modules.reverse()  # reverse order
     if model_layers is None:
