@@ -14,6 +14,7 @@ model_path=${result_path}'/'${exp_name}'/models/model_ori.pth'
 data_dir='/nfs3-p1/hjc/datasets/cifar10/train'
 save_dir=${result_path}'/'${exp_name}'/images/htrain'
 num_samples=50
+
 python core/sample_select.py \
   --model_name ${model_name} \
   --data_name ${data_name} \

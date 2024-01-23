@@ -29,4 +29,4 @@ def copy_file(src, dst):
 
 
 if __name__ == '__main__':
-    count_files('')
+    count_files('path')

@@ -17,7 +17,8 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
     def __str__(self):
-        fmtstr = '{name}[VAL:{val' + self.fmt + '} AVG:{avg' + self.fmt + '}]'
+        # fmtstr = '{name}[VAL:{val' + self.fmt + '} AVG:{avg' + self.fmt + '}]'
+        fmtstr = '{name}[{avg' + self.fmt + '}]'
         return fmtstr.format(**self.__dict__)
 
 
@@ -30,7 +31,7 @@ class ProgressMeter(object):
         self.step = step
 
     def display(self, running):
-        if running % self.step == 0:
+        if (running + 1) % self.step == 0:
             entries = [self.prefix + self._fmtstr.format(running)]  # [prefix xx.xx/xx.xx]
             entries += [str(meter) for meter in self.meters]
             print('  '.join(entries))

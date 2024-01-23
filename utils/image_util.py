@@ -1,8 +1,8 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
 import matplotlib
 
 matplotlib.use('AGG')
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 def heatmap(vals, fig_path, fig_w=None, fig_h=None, annot=False):

@@ -19,6 +19,7 @@ model_path=${result_path}'/'${exp_name}'/models/model_disa.pth'
 #----------------------------------------
 data_dir='/nfs3-p1/hjc/datasets/'${data_name}'/test'
 #----------------------------------------
+
 python engines/test.py \
   --model_name ${model_name} \
   --data_name ${data_name} \
