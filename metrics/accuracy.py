@@ -22,7 +22,7 @@ class ClassAccuracy:
         self.sum = {}
         self.count = {}
 
-    def accuracy(self, outputs, labels):
+    def update(self, outputs, labels):
         _, pred = outputs.max(dim=1)
         correct = pred.eq(labels)
 
@@ -31,7 +31,7 @@ class ClassAccuracy:
             if label not in self.sum.keys():
                 self.sum[label] = 0
                 self.count[label] = 0
-            self.sum[label] += correct[b]
+            self.sum[label] += correct[b].item()
             self.count[label] += 1
 
     def __call__(self):
@@ -41,6 +41,9 @@ class ClassAccuracy:
 
     def __getitem__(self, item):
         return self.__call__()[item]
+
+    def list(self):
+        return self.__call__()
 
     def __str__(self):
         fmtstr = '{}:{:6.2f}'
