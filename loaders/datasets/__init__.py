@@ -1,2 +1,1 @@
 from loaders.datasets.image_dataset import ImageDataset
-from loaders.datasets.image_mask_dataset import ImageMaskDataset

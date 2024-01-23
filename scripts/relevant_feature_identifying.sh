@@ -7,20 +7,17 @@ exp_name='lenet_cifar10_base'
 #----------------------------------------
 model_name='lenet'
 #----------------------------------------
-num_classes=10
+export data_name='cifar10'
+export num_classes=10
 #----------------------------------------
-model_path=${result_path}'/'${exp_name}'/models/model_ori.pth'
-mask_dir=${result_path}'/'${exp_name}'/contributions/masks'
-save_dir=${result_path}'/'${exp_name}'/models'
-#----------------------------------------
-disa_layers='-1'
-disa_labels='3 4'
+export model_path=${result_path}'/'${exp_name}'/models/model_ori.pth'
+export data_dir=${result_path}'/'${exp_name}'/images/htrain'
+export save_dir=${result_path}'/'${exp_name}'/contributions'
 
-python core/model_disassemble.py \
+python core/relevant_feature_identifying.py \
   --model_name ${model_name} \
+  --data_name ${data_name} \
   --num_classes ${num_classes} \
   --model_path ${model_path} \
-  --mask_dir ${mask_dir} \
-  --save_dir ${save_dir} \
-  --disa_layers ${disa_layers} \
-  --disa_labels ${disa_labels}
+  --data_dir ${data_dir} \
+  --save_dir ${save_dir}

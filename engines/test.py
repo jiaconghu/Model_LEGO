@@ -1,19 +1,17 @@
-import sys
-
-sys.path.append('.')
-import collections
 import os
 import argparse
 import time
-from thop import profile
 
 import torch
 from torch import nn
+import collections
 
 import loaders
 import models
 import metrics
 from utils.train_util import AverageMeter, ProgressMeter
+
+from thop import profile
 
 
 def main():
@@ -22,19 +20,18 @@ def main():
     parser.add_argument('--data_name', default='', type=str, help='data name')
     parser.add_argument('--num_classes', default='', type=int, help='num classes')
     parser.add_argument('--model_path', default='', type=str, help='model path')
-    parser.add_argument('--data_path', default='', type=str, help='data path')
-    parser.add_argument('--device_index', default='0', type=str, help='device index')
+    parser.add_argument('--data_dir', default='', type=str, help='data directory')
     args = parser.parse_args()
 
     # ----------------------------------------
     # basic configuration
     # ----------------------------------------
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.device_index
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     print('-' * 50)
     print('TEST ON:', device)
     print('MODEL PATH:', args.model_path)
+    print('DATA PATH:', args.data_dir)
     print('-' * 50)
 
     # ----------------------------------------
@@ -48,24 +45,26 @@ def main():
         model = state
     model.to(device)
 
-    test_loader = loaders.load_data(args.data_name, args.data_path, data_type='test')
+    test_loader = loaders.load_data(args.data_dir, args.data_name, data_type='test')
 
     criterion = nn.CrossEntropyLoss()
 
     # ----------------------------------------
+    # speed
+    # ----------------------------------------
+    speed(model, device)
+
+    # ----------------------------------------
     # each epoch
     # ----------------------------------------
-    since = time.time()
+    # since = time.time()
 
     loss, acc1, acc5, class_acc = test(test_loader, model, criterion, device)
-    FLOPs, Params = test_compress(model, device)
 
     print('-' * 50)
-    print('COMPLETE !!!')
     print(class_acc)
-    print(loss, acc1, acc5)
-    print('FLOPs', FLOPs, 'Params', Params)
-    print('TIME CONSUMED', time.time() - since)
+    print('AVG:', acc1.avg)
+    # print('TIME CONSUMED', time.time() - since)
 
 
 def test(test_loader, model, criterion, device):
@@ -86,7 +85,7 @@ def test(test_loader, model, criterion, device):
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             acc1, acc5 = metrics.accuracy(outputs, labels, topk=(1, 1))
-            class_acc.accuracy(outputs, labels)
+            class_acc.update(outputs, labels)
 
             loss_meter.update(loss.item(), inputs.size(0))
             acc1_meter.update(acc1.item(), inputs.size(0))
@@ -97,12 +96,12 @@ def test(test_loader, model, criterion, device):
     return loss_meter, acc1_meter, acc5_meter, class_acc
 
 
-def test_compress(model, device):
-    inputs = torch.randn(1, 3, 32, 32).to(device)
-    macs, params = profile(model, inputs=(inputs,), verbose=False)
-    FLOPs = macs / (1000 ** 3)
-    Params = params / (1000 ** 2)
-    return FLOPs * 100, Params
+def speed(model, device):
+    # model.eval()
+
+    flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32).to(device),))
+    print('FLOPs = ' + str(flops / 1000 ** 3) + 'G')
+    print('Params = ' + str(params / 1000 ** 2) + 'M')
 
 
 if __name__ == '__main__':

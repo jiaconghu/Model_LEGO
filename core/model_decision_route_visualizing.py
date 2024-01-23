@@ -1,6 +1,9 @@
+import argparse
 from tkinter import *
 import numpy as np
 import os
+
+import torch
 
 FIG_W = 1536
 FIG_H = 1024
@@ -29,6 +32,8 @@ LINE_WIDTH = 1
 COLOR_PUBLIC = '#F8AC8C'
 COLOR_NO_USE = '#c8c8c8'
 COLORS = ['#C82423', '#2878B5', ]
+
+
 # COLORS = ['#2878B5', '#C82423', ]
 
 
@@ -180,32 +185,31 @@ def draw_route(masks, layers):
     root.mainloop()
 
 
-def load_mask():
-    labels = [2]
-    layers = [3, 2, 1, 0]  # inputs
-    layers_name = ['conv' for _ in range(2)] + ['linear' for _ in range(3)]
-
-    grads_path = os.path.join(r'/nfs3-p1/hjc/cnnlego/output/vgg16_cifar10_10111427/locating/locating_layer{}.npy')
-
-    masks = []
-    for layer in layers:
-        layer_masks = []
-        for label in labels:
-            output_channel = np.load(grads_path.format(layer))[label]
-            layer_masks.append(output_channel)
-        masks.append(layer_masks)
-
-    layer_masks = [[0, 1, 0, 0, 0, 0, 0, 0, 0, 0]]
-    masks.append(layer_masks)
-    return masks, layers_name
-
-
 def main():
-    masks, layers = load_mask()
-    print(np.asarray(masks).shape)
-    print(layers)
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('--mask_dir', default='', type=str, help='mask dir')
+    parser.add_argument('--layers', default='', nargs='+', type=int, help='layers')
+    parser.add_argument('--labels', default='', nargs='+', type=int, help='labels')
+    # parser.add_argument('--save_dir', default='', type=str, help='save dir')
+    args = parser.parse_args()
 
-    draw_route(masks, layers)
+    mask_path = os.path.join(args.mask_dir, 'mask_layer{}.pt')
+
+    if args.layers[0] == -1:
+        args.layers = [4, 3, 2, 1, 0]  # Please set manually
+
+    layers_name = ['conv' for _ in range(2)] + ['linear' for _ in range(3)]  # Please set manually
+
+    for label in args.labels:
+        masks = []
+        for layer in args.layers:
+            mask_o = torch.load(mask_path.format(layer - 1))[label].numpy()
+            masks.append([mask_o])
+
+        print(masks)
+        print(np.asarray(masks).shape)
+        print(layers_name)
+        draw_route(masks, layers_name)
 
 
 if __name__ == '__main__':

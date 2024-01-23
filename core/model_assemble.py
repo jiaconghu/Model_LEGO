@@ -1,7 +1,3 @@
-import sys
-
-sys.path.append('.')
-
 import torch
 import argparse
 
@@ -17,7 +13,7 @@ def main():
     model2 = torch.load(args.model2_path).cuda()
 
     # architecture
-    print('=================> architecture')
+    print('=================> Architecture Assembling')
     layer = 0
     for module1, module2 in zip(model1.modules(), model2.modules()):
         if isinstance(module1, torch.nn.Conv2d):
@@ -37,7 +33,7 @@ def main():
     print(model1)
 
     # parameter
-    print('=================> parameter')
+    print('=================> Parameter Assembling')
     layer = 0
     for p1, p2 in zip(model1.parameters(), model2.parameters()):
         if len(p1.shape) > 2:

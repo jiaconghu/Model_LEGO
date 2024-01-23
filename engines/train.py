@@ -1,11 +1,7 @@
-import sys
-
-sys.path.append('.')
-
 import os
 import argparse
-import time
 import shutil
+import time
 from tqdm import tqdm
 
 import torch
@@ -26,19 +22,15 @@ def main():
     parser.add_argument('--num_classes', default='', type=int, help='num classes')
     parser.add_argument('--num_epochs', default=200, type=int, help='num epochs')
     parser.add_argument('--model_dir', default='', type=str, help='model dir')
-    parser.add_argument('--data_dir', default='', type=str, help='data dir')
+    parser.add_argument('--data_train_dir', default='', type=str, help='data dir')
+    parser.add_argument('--data_test_dir', default='', type=str, help='data dir')
     parser.add_argument('--log_dir', default='', type=str, help='log dir')
-    parser.add_argument('--device_index', default='0', type=str, help='device index')
     args = parser.parse_args()
 
     # ----------------------------------------
     # basic configuration
     # ----------------------------------------
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.device_index
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
-    train_path = os.path.join(args.data_dir, 'train')
-    test_path = os.path.join(args.data_dir, 'test')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     if not os.path.exists(args.model_dir):
         os.makedirs(args.model_dir)
@@ -48,7 +40,7 @@ def main():
     print('-' * 50)
     print('TRAIN ON:', device)
     print('MODEL DIR:', args.model_dir)
-    print('LOG DIR:', args.log_dir)
+    # print('LOG DIR:', args.log_dir)
     print('-' * 50)
 
     # ----------------------------------------
@@ -57,8 +49,8 @@ def main():
     model = models.load_model(args.model_name, num_classes=args.num_classes)
     model.to(device)
 
-    train_loader = loaders.load_data(args.data_name, train_path, data_type='train')
-    test_loader = loaders.load_data(args.data_name, test_path, data_type='test')
+    train_loader = loaders.load_data(args.data_train_dir, args.data_name, data_type='train')
+    test_loader = loaders.load_data(args.data_test_dir, args.data_name, data_type='test')
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
@@ -75,6 +67,7 @@ def main():
     best_epoch = None
 
     for epoch in tqdm(range(args.num_epochs)):
+        print('\n')
         loss, acc1, acc5 = train(train_loader, model, criterion, optimizer, device)
         writer.add_scalar(tag='training loss', scalar_value=loss.avg, global_step=epoch)
         writer.add_scalar(tag='training acc1', scalar_value=acc1.avg, global_step=epoch)
@@ -88,14 +81,14 @@ def main():
         if best_acc is None or best_acc < acc1.avg:
             best_acc = acc1.avg
             best_epoch = epoch
-            torch.save(model, os.path.join(args.model_dir, 'model_ori.pth'))
+            torch.save(model.state_dict(), os.path.join(args.model_dir, 'model_ori.pth'))
 
         scheduler.step()
 
-    print('COMPLETE !!!')
     print('BEST ACC', best_acc)
     print('BEST EPOCH', best_epoch)
     print('TIME CONSUMED', time.time() - since)
+    print('MODEL DIR', args.model_dir)
 
 
 def train(train_loader, model, criterion, optimizer, device):

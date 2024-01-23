@@ -1,6 +1,6 @@
 # CNN LEGO: Disassembling and Assembling Convolutional Neural Networks
 
-![](framework.jpg)
+<div align=center><img width="450" src="framework.jpg"/></div>
 
 ## Requirements
 
@@ -12,31 +12,50 @@
 ### Prepare The Source Models
 
 * Training a pre-trained model:
-> bash scripts/train.sh
+```bash
 
-* Test a model:
-> bash scripts/tesh.sh
+```
+
 
 ### Model Disassembling
-![](model_disassembling.jpg)
-* Before disassembling & assembling:
-> bash scripts/sample_sift.sh  
+<div align=center><img width="450" src="model_disassembling.jpg"/></div>
 
-* Component Locating:
-> bash scripts/component locating.sh
+* Selecting the Top 1% of Samples with High Confidence:
+```bash
 
-* Model Disassembling:
-> bash scripts/model_disassemble.sh
+```
+
+* Relevant Feature Identifying (\alpha and \beta can be configured in core/relevant_feature_identifying.py):
+```bash
+
+```
+
+* Parameter Linking and Model Disassembling (output the disassembled task-aware component):
+```bash
+
+```
 
 
 ### Model Assembling
-![](model_assembling.jpg)
-* Contribution Rescaling:
-> bash scripts/model_rescale.sh
+<div align=center><img width="450" src="model_assembling.jpg"/></div>
 
-* Model Assembling:
-> bash scripts/model_assemble.sh
+* Parameter Scaling (optional):
+```bash
+
+```
+
+* Alignment Padding and Model Assembling (output the assembled model):
+```bash
+
+```
 
 ### Others
+* Evaluate the accuracy of the model or task-aware component:
+```bash
+
+```
+
 * Decision Route Visualization:
-> python core/model_route_visualize.py
+```bash
+
+```

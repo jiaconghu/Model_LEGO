@@ -5,22 +5,23 @@ result_path='/nfs3/hjc/projects/cnnlego/output'
 #----------------------------------------
 exp_name='lenet_cifar10_base'
 #----------------------------------------
+#model_name='vgg16'
+#model_name='resnet50'
 model_name='lenet'
 #----------------------------------------
+data_name='cifar10'
 num_classes=10
+#data_name='cifar100'
+#num_classes=100
 #----------------------------------------
-model_path=${result_path}'/'${exp_name}'/models/model_ori.pth'
-mask_dir=${result_path}'/'${exp_name}'/contributions/masks'
-save_dir=${result_path}'/'${exp_name}'/models'
+#model_path=${result_path}'/'${exp_name}'/models/model_ori.pth'
+model_path=${result_path}'/'${exp_name}'/models/model_disa.pth'
 #----------------------------------------
-disa_layers='-1'
-disa_labels='3 4'
-
-python core/model_disassemble.py \
+data_dir='/nfs3-p1/hjc/datasets/'${data_name}'/test'
+#----------------------------------------
+python core/parameter_scaling.py \
   --model_name ${model_name} \
+  --data_name ${data_name} \
   --num_classes ${num_classes} \
   --model_path ${model_path} \
-  --mask_dir ${mask_dir} \
-  --save_dir ${save_dir} \
-  --disa_layers ${disa_layers} \
-  --disa_labels ${disa_labels}
+  --data_dir ${data_dir}
