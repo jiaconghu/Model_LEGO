@@ -10,7 +10,7 @@
 
 ## Quick Start
 
-### Prepare The Source Models
+### Prepare the Source Models
 
 * Train a Pre-trained Model:
 
