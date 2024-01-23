@@ -1,13 +1,15 @@
 # CNN LEGO: Disassembling and Assembling Convolutional Neural Networks
 
-![图片](framework.png)
+![](framework.jpg)
 
-### Environment
+## Requirements
 
-+ Python: 3.8
-+ GPU: NVIDIA A40 / Quadro P6000
++ Python version: 3.9
++ PyTorch version: 2.0.1
++ GPU: NVIDIA RTX A6000 / NVIDIA A40
 
-### Command
+## Quick Start
+### Prepare The Source Models
 
 * Training a pre-trained model:
 > bash scripts/train.sh
@@ -15,6 +17,8 @@
 * Test a model:
 > bash scripts/tesh.sh
 
+### Model Disassembling
+![](model_disassembling.jpg)
 * Before disassembling & assembling:
 > bash scripts/sample_sift.sh  
 
@@ -24,18 +28,15 @@
 * Model Disassembling:
 > bash scripts/model_disassemble.sh
 
+
+### Model Assembling
+![](model_assembling.jpg)
 * Contribution Rescaling:
 > bash scripts/model_rescale.sh
 
 * Model Assembling:
 > bash scripts/model_assemble.sh
 
+### Others
 * Decision Route Visualization:
 > python core/model_route_visualize.py
-
-### Code Description
-
-* configs: some important configurations.
-* models: CNN classifiers.
-* loaders: data loaders.
-
