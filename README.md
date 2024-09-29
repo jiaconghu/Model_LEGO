@@ -1,4 +1,6 @@
-# CNN LEGO: Disassembling and Assembling Convolutional Neural Networks
+# Model LEGO: Creating Models Like Disassembling and Assembling Building Blocks
+
+
 
 <div align="center"><img width="450" src="framework.jpg"/></div>
 
